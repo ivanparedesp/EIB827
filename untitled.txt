@@ -1,0 +1,26 @@
+# 1. Simular datos
+import numpy as np
+import scipy as sp
+import matplotlib.pyplot as plt
+
+# Generar datos {t,y}, en donde y=sin(x)*a
+t = np.linspace(0,20,200)
+m,b=[2,0.5]
+yy = m*t+b 
+noise = np.random.normal(0,0.2,200)
+y = yy + noise
+
+# 2. Ajustar a datos
+from scipy.optimize import leastsq
+def residual(params,x,y):
+    m,b=params
+    model = m*x+b
+    return y-model
+
+out=leastsq(residual,[1,0],args=(t,y))
+print out
+m_hat,b_hat=out[0]
+fit=m_hat*t+b_hat
+plt.plot(t,y,'ro')
+plt.plot(t,fit)
+plt.show()
